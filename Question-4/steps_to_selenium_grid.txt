@@ -1,0 +1,27 @@
+Here i am deploying the nodes and hub on single machine(WINDOWS Machine)
+
+Download the selenium standalone server from seleniumhq.org
+After successful download, extract the files.
+You will now see a jar file named ex: selenium-server-standalone-3.141.59.jar
+now open command prompt and use the following command set up the hub.
+	--> java -jar selenium-server-standalone-3.141.59.jar -role hub
+Once selenium hub is ready then you can check the status on the browser using 
+	--> http://localhost:4444/grid/console
+
+
+Open another command prompt window use the below command launch the nodes
+    --> java -jar selenium-server-standalone-3.141.59.jar -role node -port 5556 -hub http://localhost:4444/grid/register 
+By default when you start a node, you will get 5 instances of chrome, 5 instances of firefox and 1 instance of internet explorer
+
+If you want to specify the number of instances of a browser, you can use the following command,
+	-->java -jar selenium-server-standalone-3.141.59.jar -role node -port 5556 -browser "browserName=chrome, maxInstances=4" -hub http://localhost:4444/grid/register
+
+To run chrome browser you need the chrome driver.Download the chrome driver and add the driver path to PATH variable.
+Or the other option is to specify the path of the driver in the command, when launching a node
+	--> java -jar -Dwebdriver.chrome.driver="replacewithdriverpath" selenium-server-standalone-3.141.59.jar -role node -port 5556 -browser "browserName=chrome, maxInstances=4" -hub http://localhost:4444/grid/register
+
+To run a client python script you need to install pip and selenium.
+To install pip you need to download get-pip.py file and run
+	--> python get-pip.py
+To install selenium run the following command.
+	--> pip install -U selenium.
