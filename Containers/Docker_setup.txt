@@ -1,0 +1,36 @@
+To build containers you use Docker Engine.
+Download specific version of docker engine for Linux: https://docs.docker.com/engine/installation/linux
+Steps for installing latex version of docker in ubuntu-xenial
+	--> sudo apt-get install docker.io
+    --> docker --version (to check docker version)
+installing git(optional)
+    --> sudo apt-get install git(for cloning repository)
+After cloning the repository you can use root user to build the docker image or you can grant for a user using the following command
+    --> sudo usermod -G docker ubuntu
+To build  a project(creates image) docker build is used
+if you are in the same folder where Dockerfile is present use the following command 
+    --> docker build .
+    other specify the path 
+
+To run a container locally
+    --> docker run -p 3000:3000 -it imageid 
+        -p for port forwarding
+		first 3000 is container port and second 3000 is the host port where port is running
+		-i command is for interactive mode so that you can manually aferwards
+
+
+To make available to kubernetes you need to push to docker registry
+   --> docker login
+ 
+To tag during build use -t 
+	--> docker build -t urlogin/name
+To tag an image after build
+	--> docker tag imageid urlogin/name:versionid(optional)
+To list all images
+	-->docker images
+To push to docker registry
+	--> docker push urlogin/name
+
+
+
+

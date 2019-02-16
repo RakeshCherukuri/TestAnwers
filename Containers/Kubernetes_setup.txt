@@ -1,0 +1,60 @@
+different ways to setup k8's
+	--> Minikube to spin up local machine with kubernetes cluster
+	--> Kops to spin up a cluster on AWS
+use Minikube from https://github.com/kubernetes/minikube.
+runs a single-node kubernetes cluster inside a linuxVM.
+
+Command to install minikube:
+	--> curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64 \
+  && sudo install minikube-linux-amd64 /usr/local/bin/minikube
+  	--> minikube start
+  		cat ~/.kube/config (kubectl cli tool)
+command to install kubectl
+	--> curl -Lo kubectl https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl && chmod +x kubectl && sudo mv kubectl /usr/local/bin/
+
+To test kubectl we will use run command.Run command is used to run an image on clusters.
+	--> kubectl run test-minikube --image=gcr.io/google_containers/echoserver:1.4 --port=8080
+	--> kubectl expose deployment test-minikube --type=NodePort
+	--> minikube service test-minikube --url
+goto localhost:specifiedport
+to stop the cluster: minikube stop
+###Docker Client
+install docker client from 
+	--> https://hub.docker.com/editions/community/docker-ce-desktop-windows/plans/docker-ce-desktop-windows-tier?tab=instructions
+kubectl get nodes
+kubectl config get-context
+kubectl config use-contect context name
+kubectl get service servicename
+
+########Kops(kubernetes operations)
+- kops only works on mac/linux
+Command to install on linux:
+	--> curl -LO https://github.com/kubernetes/kops/releases/download/$(curl -s https://api.github.com/repos/kubernetes/kops/releases/latest | grep tag_name | cut -d '"' -f 4)/kops-linux-amd64
+	--> chmod +x kops-linux-amd64
+	--> sudo mv kops-linux-amd64 /usr/local/bin/kops
+To install Awscli
+	--> sudo apt-get install python-pip
+	--> pip install awscli
+	--> aws configure(optional i.e (create a user and use his keys or if you are installing kops in ec2 use the IAM role))
+
+Go to S3 and create a bucket which stores the kops state 
+Create a hosted domain and use the nameservers for sub domain.
+
+sudo apt install bind9-host
+host -t NS your subdomain name
+
+###cluster setup
+ssh  login to cluster
+	-> ssh-keygen -f .ssh/id_rsa(private)
+	cat .ssh/id_rsa.pub(public key)
+Kops commmand to launch  a cluster
+	--> kops create cluster --name=your.domain.name --state=s3://bucket_name --zones=zonename(eu-west-1a) --node-size=t2.micro --master-size=t2.micro -dns-zone=your.domain.name
+To edit cluster
+	--> kops edit cluster your.domain.name --state=s3://bucket_name
+configure your cluster with:
+	--> kops update cluster your.domain.name --yes --state=s3://bucket_name
+	--> kubectl run test-minikube --image=gcr.io/google_containers/echoserver:1.4 --port=8080
+	--> kubectl expose deployment test-minikube --type=NodePort
+
+to delete cluster
+	--> kops delete cluster your.domain.name --state=s3://bucket_name --yes
