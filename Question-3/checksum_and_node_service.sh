@@ -19,7 +19,7 @@ fi
 # Stop node if it is running
 if (systemctl -q is-active mongod)
   then
-    sudo systemctl stop node.service
+    systemctl stop node.service
 else
     echo Service not running
 fi
@@ -29,9 +29,9 @@ tar -xf $NODE_ROOT/code_base.tar.gz -C $NODE_ROOT
 # Start node 
 if (systemctl -q is-active mongod)
   then
-    sudo systemctl start node.service
+    systemctl start node.service
 else
     echo Service already running
-    sudo systemctl restart node.service
+    systemctl restart node.service
 fi
 
